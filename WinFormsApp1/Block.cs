@@ -14,25 +14,25 @@ namespace Hash
         public DateTime Created { get; private set; }
         public string Hash { get; private set; }
         public string PreviousHash { get; private set; }
-        public string User { get; set; }
+        public string User { get;private set; }
 
 
         public Block()
         {
             id = 1;
-            Data = "Hash";
-            Created = DateTime.Parse("24.04.2024 00:00:00.000").ToLocalTime();
-            PreviousHash = "11111";
-            User = "Dmitriy";
+            Data = "Hello World";
+            Created = DateTime.Now;
+            PreviousHash = "111111";
+            User = "Admin";
 
             var data = GetData();
             Hash = GetHash(data);
         }
         public Block(string data, string user, Block block)
         {
-            if (string.IsNullOrEmpty(data))
+            if (string.IsNullOrWhiteSpace(data))
             {
-                throw new ArgumentNullException($"Empty data", nameof(data));
+                throw new ArgumentNullException(nameof(data), "Empty data");
             }
 
             if (block == null)
@@ -40,7 +40,7 @@ namespace Hash
                 throw new ArgumentNullException("Empty Argument Block", nameof(block));
             }
 
-            if (string.IsNullOrEmpty(user))
+            if (string.IsNullOrWhiteSpace(user))
             {
                 throw new ArgumentNullException("Empty argument user", nameof(user));
             }
@@ -68,12 +68,17 @@ namespace Hash
             var massage = Encoding.ASCII.GetBytes(data);
             var hashString = new SHA256Managed();
             string hex = "";
+
             var hashValue = hashString.ComputeHash(massage);
             foreach (byte b in hashValue)
             {
                 hex += String.Format("{0:x2}", b);
             }
             return hex;
+        }
+        public override string ToString()
+        {
+            return Data;
         }
     }
 }
